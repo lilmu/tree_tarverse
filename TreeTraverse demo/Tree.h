@@ -26,17 +26,22 @@ template <class T> class Tree {
 		Tree() { root = NULL; };
 
 		~Tree() {
-			TreeNode<T>* CurrrentNode = root;
-			queue <TreeNode<T>> q;
-			while (CurrentNode) {
-				if (CurrentNode->LeftChild) q.push(CurrentNode->LeftChild);
-				if (CurrentNode->RightChild) q.push(CurrentNode->RightChild);
-				delete CurrentNode;
-				CurrentNode = q.front;
-				q.pop;
+			if (!root) return;
+
+			queue<TreeNode<T>*> q;
+			q.push(root);
+
+			while (!q.empty()) {
+				TreeNode<T>* current = q.front();
+				q.pop();
+
+				if (current->LeftChild) q.push(current->LeftChild);
+				if (current->RightChild) q.push(current->RightChild);
+
+				delete current;
 			}
-			cout << "Tree Destructor Called"
-		};
+			//cout << "Tree Destructor Called" << endl;
+		}
 
 		bool isempty() { return(root == NULL); };
 
@@ -87,8 +92,8 @@ template <class T> class Tree {
 		void Preorder(TreeNode<T>* CurrentNode) {
 			if (CurrentNode != NULL) {
 				cout << CurrentNode->data << " ";   // Print data
-				Inorder(CurrentNode->LeftChild);  // Visit LeftChild subtree
-				Inorder(CurrentNode->RightChild); // Visit RightChild subtree
+				Preorder(CurrentNode->LeftChild);  // Visit LeftChild subtree
+				Preorder(CurrentNode->RightChild); // Visit RightChild subtree
 			}
 		};
 
@@ -99,50 +104,31 @@ template <class T> class Tree {
 		};
 		void Postorder(TreeNode<T>* CurrentNode) {
 			if (CurrentNode != NULL) {
-				Inorder(CurrentNode->LeftChild);  // Visit LeftChild subtree
-				Inorder(CurrentNode->RightChild); // Visit RightChild subtree
+				Postorder(CurrentNode->LeftChild);  // Visit LeftChild subtree
+				Postorder(CurrentNode->RightChild); // Visit RightChild subtree
 				cout << CurrentNode->data << " ";   // Print data
 			}
 		};
 
 		// levelorder expression
 		void Levelorder() {
-			queue<TreeNode<T>> q;
+			queue<TreeNode<T>*> q;
 			TreeNode<T>* CurrentNode = root;
 			while (CurrentNode) {
-				cout << CurrentNode->data << endl;
+				cout << CurrentNode->data << " ";
 				if (CurrentNode->LeftChild) q.push(CurrentNode->LeftChild);
 				if (CurrentNode->RightChild) q.push(CurrentNode->RightChild);
-				CurrentNode = q.front;
-				q.pop;
+				if (q.empty()) {
+					cout << endl;
+					return;
+				}
+				CurrentNode = q.front();
+				q.pop();
 			}
 		};
 
 	private:
 		TreeNode<T> *root;
 };
-
-////Function to visit nodes in Preorder
-//template <class T>
-//void Tree<T>::Preorder(TreeNode <T>* CurrentNode) {
-//	cout << "do preorder by yourself\n";
-//};
-//
-////Function to visit nodes in Postorder
-//template <class T>
-//void Tree<T>::Postorder(TreeNode<T>* CurrentNode) {
-//	cout << "do it by yourself\n";
-//};
-//// Insert the item into the tree according to its priority, i.e., A<C<E etc.
-//// That is the so-called binary search tree
-//template <class T>
-//void Tree<T>::Insert(T item) {
-//	cout << "do BST insert by yourself\n";
-//};
-//
-//template <class T>
-//void Tree<T>::Levelorder() {
-//	cout << "do levelorder by yourself\n";
-//};
 
 #endif
